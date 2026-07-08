@@ -111,13 +111,13 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>.</sourceDirectory>
         <resources>
             <resource>
-                <directory>.</directory>
+                <directory>src/main/resources</directory>
                 <includes>
                     <include>plugin.yml</include>
                     <include>defaults/**</include>
+                    <include>META-INF/**</include>
                 </includes>
             </resource>
         </resources>
@@ -161,7 +161,7 @@
                 <version>3.3.0</version>
                 <configuration>
                     <archive>
-                        <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
             </plugin>
