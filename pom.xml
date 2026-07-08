@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sk89q</groupId>
+    <artifactId>worldedit</artifactId>
+    <version>6.1.7</version>
+    <packaging>jar</packaging>
+
+    <name>WorldEdit</name>
+    <description>WorldEdit is an in-game map editor for Minecraft.</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>spigotmc-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Bukkit API (provided by the server at runtime).
+             1.12.2 matches the era of this WorldEdit source; the code uses
+             pre-1.13 APIs like Material IDs and ItemStack.getTypeId(). -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>17.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JSR 305: @Nullable / @Nonnull -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>1.3.9</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JSR 330: @Named -->
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- SnakeYAML (bundled with Bukkit, but used directly) -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Rhino JavaScript engine -->
+        <dependency>
+            <groupId>rhino</groupId>
+            <artifactId>js</artifactId>
+            <version>1.7R2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- TrueZIP for snapshot/zip chunk stores -->
+        <dependency>
+            <groupId>de.schlichtherle</groupId>
+            <artifactId>truezip</artifactId>
+            <version>6.8.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Paranamer for parameter-name reflection in command framework -->
+        <dependency>
+            <groupId>com.thoughtworks.paranamer</groupId>
+            <artifactId>paranamer</artifactId>
+            <version>2.6</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Tests -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>plugin.yml</include>
+                    <include>defaults/**</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                    <testExcludes>
+                        <!-- Nothing for now -->
+                    </testExcludes>
+                    <excludes>
+                        <!-- Version-specific CraftBukkit/Spigot NMS adapters.
+                             Each requires its own NMS jar (net.minecraft.server.vX_RY.*)
+                             which is not distributed via Maven and must be built locally
+                             with Spigot's BuildTools. Excluded so the core compiles
+                             without those jars; adapters are loaded reflectively at
+                             runtime by BukkitImplLoader. -->
+                        <exclude>com/sk89q/worldedit/bukkit/adapter/impl/**</exclude>
+                        <!-- Optional third-party permissions plugin integrations.
+                             These depend on artifacts not in any public Maven repo,
+                             so the resolvers are excluded. PermissionsResolverManager
+                             falls back to DinnerPerms / flat-file at runtime when the
+                             backing plugin is absent. -->
+                        <exclude>**/PermissionsExResolver.java</exclude>
+                        <exclude>**/bPermissionsResolver.java</exclude>
+                        <exclude>**/GroupManagerResolver.java</exclude>
+                        <exclude>**/NijiPermissionsResolver.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <testFailureIgnore>false</testFailureIgnore>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,35 @@
+package com.sk89q.jchronic.handlers;
+
+import com.sk89q.jchronic.Options;
+import com.sk89q.jchronic.tags.ScalarDay;
+import com.sk89q.jchronic.tags.ScalarMonth;
+import com.sk89q.jchronic.tags.ScalarYear;
+import com.sk89q.jchronic.utils.Span;
+import com.sk89q.jchronic.utils.Time;
+import com.sk89q.jchronic.utils.Token;
+import java.util.Calendar;
+import java.util.List;
+
+public class SmSdSyHandler implements IHandler {
+   @Override
+   public Span handle(List<Token> tokens, Options options) {
+      int month = tokens.get(0).getTag(ScalarMonth.class).getType();
+      int day = tokens.get(1).getTag(ScalarDay.class).getType();
+      int year = tokens.get(2).getTag(ScalarYear.class).getType();
+
+      Span span;
+      try {
+         List<Token> timeTokens = tokens.subList(3, tokens.size());
+         Calendar dayStart = Time.construct(year, month, day);
+         span = Handler.dayOrTime(dayStart, timeTokens, options);
+      } catch (IllegalArgumentException var9) {
+         if (options.isDebug()) {
+            var9.printStackTrace(System.out);
+         }
+
+         span = null;
+      }
+
+      return span;
+   }
+}
