@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-WorldEdit-Version: 6.1.7.2
-Class-Path: truezip.jar WorldEdit/truezip.jar js.jar WorldEdit/js.jar
-

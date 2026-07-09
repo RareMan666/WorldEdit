@@ -5,7 +5,6 @@ import com.sk89q.worldedit.util.YAMLConfiguration;
 import java.io.File;
 
 public class BukkitConfiguration extends YAMLConfiguration {
-   public boolean noOpPermissions = false;
    private final WorldEditPlugin plugin;
 
    public BukkitConfiguration(YAMLProcessor config, WorldEditPlugin plugin) {
@@ -16,7 +15,6 @@ public class BukkitConfiguration extends YAMLConfiguration {
    @Override
    public void load() {
       super.load();
-      this.noOpPermissions = this.config.getBoolean("no-op-permissions", false);
       this.migrateLegacyFolders();
    }
 

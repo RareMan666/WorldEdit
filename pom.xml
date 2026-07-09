@@ -120,6 +120,16 @@
                     <include>META-INF/**</include>
                 </includes>
             </resource>
+            <!-- Non-Java resources that live alongside source files in
+                 src/main/java (e.g. blocks.json loaded by BundledBlockData
+                 via class.getResource()). Must be copied to target/classes
+                 so they ship inside the jar at the same package path. -->
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.json</include>
+                </includes>
+            </resource>
         </resources>
 
         <plugins>
@@ -159,11 +169,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
-                <configuration>
-                    <archive>
-                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-                    </archive>
-                </configuration>
             </plugin>
 
             <plugin>
