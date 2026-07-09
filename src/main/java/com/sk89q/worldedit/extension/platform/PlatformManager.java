@@ -203,6 +203,10 @@ public class PlatformManager {
                   return;
                }
 
+               if (!player.hasCreativeMode()) {
+                  return;
+               }
+
                RegionSelector selector = session.getRegionSelector(player.getWorld());
                if (selector.selectPrimary(location.toVector(), ActorSelectorLimits.forActor(player))) {
                   selector.explainPrimarySelection(actor, session, vector);
@@ -234,6 +238,10 @@ public class PlatformManager {
                }
 
                if (!actor.hasPermission("worldedit.selection.pos")) {
+                  return;
+               }
+
+               if (!player.hasCreativeMode()) {
                   return;
                }
 
@@ -269,6 +277,10 @@ public class PlatformManager {
                   return;
                }
 
+               if (!player.hasCreativeMode()) {
+                  return;
+               }
+
                WorldVector pos = player.getSolidBlockTrace(this.getConfiguration().navigationWandMaxDistance);
                if (pos != null) {
                   player.findFreePosition(pos);
@@ -296,6 +308,10 @@ public class PlatformManager {
                }
 
                if (!player.hasPermission("worldedit.navigation.thru.tool")) {
+                  return;
+               }
+
+               if (!player.hasCreativeMode()) {
                   return;
                }
 
